@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Website for The Electronics Club of IIT Bombay. Electronics Club is a group of electronics enthusiasts in IITB who conduct sessions and events on electronics for the community.">
+
+    <title>Sudoku Solver - Electronics Club, IIT Bombay</title>
+
+    <link rel="canonical" href="https://elec-club-iitb.github.io/blog/2016/07/sudoku-solver/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Profile -->
+    <link rel="stylesheet" href="/css/profile.css">    
+
+    <!-- Slick carousel -->
+    <link rel="stylesheet" type="text/css" href="/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="/slick/slick-theme.css"/>
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <link rel="shortcut icon" href="/assets/ico/favicon.png">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!--% feed_meta %}-->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-74765045-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img alt="logo" class="logo" src="/assets/ico/logo.png"></img>
+                Electronics Club, IIT Bombay
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/blog">Blog</a>
+                </li>
+                
+                <li>
+                    <a href="/tutorials">Tutorials</a>
+                </li>
+                
+                <li>
+                    <a href="/events">Events</a>
+                </li>
+                
+                <li>
+                    <a href="/chat">Chat</a>
+                </li>
+                
+                <li>
+                    <a href="/teampage">Team</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <div class="content-wrapper">
+        <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/assets/sudoku-solver/cover.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Sudoku Solver</h1>
+                    
+                    <h3 class="subheading">OpenCV project for reading and solving Sudokus</h3>
+                    
+                    <h4 class="meta">
+                        <b>Category:</b> Projects 
+                        <b>Tags:</b> Algorithm, OpenCV
+                    </h4>
+                    <span class="meta">Posted by Anant Jain on July 31, 2016</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 content-wrapper">
+
+                <p><strong>Sudoku Solver</strong> is the collection of very basic image processing techniques. A very good way to start is the OpenCV library which can be compiled on almost all the platforms. <strong>OpenCV</strong>(open source computer vision )is a library of programming functions mainly aimed at real time computer vision. Through this project ,my main motivation was to explore what OpenCV offers in a little bit detail . There are already many blogs dealing with how to recognise a whole sudoku puzzle but it  was nevertheless  a pleasant experience doing it on my own and writing this blog ( It is pretty obvious that I too would have been lost without all those online resources , blogs , and documentations.)</p>
+
+<h3 id="what-actually-this-project-does">What actually this project does?</h3>
+
+<p>It takes an input image of a sudoku and processes the image and identifies the all the whole suduko and return the answer of the sudoku.
+It involves two major challenges:</p>
+
+<ol>
+  <li>Image recognition</li>
+  <li>Solving the sudoku puzzle</li>
+</ol>
+
+<p>I was more interested in the image processing part as there are fixed algorithm for solving  the sudoku puzzle so my main focus in this blog would be the image processing part.</p>
+
+<h3 id="the-major-steps-this-will-involve-are"><strong>The major steps this will involve are:</strong></h3>
+
+<ol>
+  <li> Reading an image</li>
+  <li> Preprocessing the image ( removal of noises and thresholding the image)</li>
+  <li> Finding the sudoku square out of the whole image</li>
+  <li> Extracting the sub-grids of the sudoku.</li>
+  <li>Recognising the digits (OCR)</li>
+</ol>
+
+<h3 id="we-also-need-to-make-a-few-assumptions-"><strong>We also need to make a few assumptions :</strong></h3>
+
+<ol>
+  <li>In the image , the largest square would be that of the sudoku image</li>
+  <li>The puzzle would be oriented reasonably oriented.</li>
+</ol>
+
+<p><strong>So let’s get started, </strong></p>
+
+<p>First of all we need is an input image.  We need to load a sudoku image .</p>
+
+<p><img src="/assets/sudoku-solver/image1.jpg" alt="image" /></p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">     <span class="n">Mat</span> <span class="n">src</span> <span class="o">=</span> <span class="n">imread</span><span class="p">(</span><span class="s">"sudoku.jpg"</span><span class="p">,</span><span class="n">CV_LOAD_IMAGE_UNCHANGED</span><span class="p">);</span></code></pre></figure>
+
+<p>After loading the image ,the first thing to do in any image processing problem is to reduce the amount of data you are dealing with.We started with a full colour high resolution image.The first thing we can do is to convert the image into a gray scale as looking at our sample image having colour is of no use to us.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">     <span class="n">Mat</span> <span class="n">srcb</span><span class="p">;</span>
+     <span class="n">cvtColor</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">srcb</span><span class="p">,</span> <span class="n">COLOR_BGR2GRAY</span><span class="p">);</span></code></pre></figure>
+
+<h3 id="image-processing">Image Processing:</h3>
+
+<p>After we have converted the image into a gray scale image we need to remove the noises from the image and smoothen the image as without smoothing the image we deal with extra objects which are not needed so it is necessary to remove the noises. There are many functions available in the OpenCV library for blurring the image like blur , GaussianBlur , MedianBlur . I tried them all and the best result I got out of them was with gaussian blur so I used it . Next , what we need to do is to remove other extra information . We are going to threshold the image that is we have either the foreground pixel or the background pixel. There are variety of thresholding techniques available to us in OpenCV library. My personal favourite is a simple adaptive threshold .For each pixel in the image it takes the average value of the surrounding area.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">    <span class="n">Mat</span> <span class="n">smooth</span><span class="p">;</span>
+    <span class="n">Mat</span> <span class="n">thresholded</span><span class="p">;</span>
+    <span class="n">GaussianBlur</span><span class="p">(</span><span class="n">srcb</span><span class="p">,</span> <span class="n">smooth</span><span class="p">,</span> <span class="n">Size</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">//removing noises
+</span>
+    <span class="n">adaptiveThreshold</span><span class="p">(</span><span class="n">smooth</span><span class="p">,</span> <span class="n">thresholded</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">ADAPTIVE_THRESH_MEAN_C</span><span class="p">,</span><span class="n">THRESH_BINARY_INV</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span></code></pre></figure>
+
+<p> I  have done just noise removal and adaptive thresholding and  it is working so haven’t done anything extra. Below is the result:</p>
+
+<p><img src="/assets/sudoku-solver/image2.png" alt="image" /></p>
+
+<h3 id="extracting-the-sudoku-">Extracting the Sudoku :</h3>
+
+<p>Now after thresholding we need to find out the sudoku square , for this we made an assumption the main thing in our image would be the sudoku so we need to find the square with the largest area and it would be our sudoku.</p>
+
+<p>So one thing is very important the sudoku square should be largest otherwise our method fails.</p>
+
+<p>We start by finding the countours in our thresholded image.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">     <span class="n">vector</span><span class="o">&lt;</span> <span class="n">vector</span> <span class="o">&lt;</span> <span class="n">Point</span> <span class="o">&gt;&gt;</span><span class="n">contours</span><span class="p">;</span> 
+     <span class="n">vector</span>  <span class="n">heirarchy</span><span class="p">;</span>
+     <span class="n">findContours</span><span class="p">(</span><span class="n">thresholded2</span><span class="p">,</span> <span class="n">contours</span><span class="p">,</span> <span class="n">heirarchy</span><span class="p">,</span> <span class="n">CV_RETR_TREE</span><span class="p">,</span><span class="n">CV_CHAIN_APPROX_SIMPLE</span><span class="p">);</span></code></pre></figure>
+
+<p>Now we find the blob with maximum area .First we filter them by area . We consider the blob for the next processing only if its area is greater than a particular value (here , it is 50) . Next , we find out the area of each blob and hence extract the blob which has the maximum area.  </p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">    <span class="kt">double</span> <span class="n">area</span><span class="p">;</span> <span class="kt">double</span> <span class="n">maxarea</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="kt">int</span> <span class="n">p</span><span class="p">;</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">contours</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="n">area</span> <span class="o">=</span> <span class="n">contourArea</span><span class="p">(</span><span class="n">contours</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">false</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">area</span> <span class="o">&gt;</span> <span class="mi">50</span> <span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="n">area</span> <span class="o">&gt;</span> <span class="n">maxarea</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="n">maxarea</span> <span class="o">=</span> <span class="n">area</span><span class="p">;</span>
+          <span class="n">p</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="p">}</span>
+       <span class="p">}</span></code></pre></figure>
+
+<p>Now after finding the blob with maximum area we approximate the countour into a polygon. It removes the unwanted coordiante values in the countour and keeps only the corners.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">    <span class="kt">double</span> <span class="n">perimeter</span> <span class="o">=</span> <span class="n">arcLength</span><span class="p">(</span><span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">],</span> <span class="nb">true</span><span class="p">);</span>
+    <span class="n">approxPolyDP</span><span class="p">(</span><span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">],</span> <span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">],</span> <span class="mi">0</span><span class="p">.</span><span class="mo">01</span><span class="o">*</span><span class="n">perimeter</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span></code></pre></figure>
+
+<p>Now we draw the contour on our image just to check it.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">    <span class="n">drawContours</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">contours</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Scalar</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span></code></pre></figure>
+
+<p><img src="/assets/sudoku-solver/image3.png" alt="image" /></p>
+
+<p>Now we have found out the boundary of the sudoku and next we need to to do is extract this much part and then work on it.</p>
+
+<p>As we have approximated the contours into a square or rectangle we will get only four coordinate that are the corners and now what we need to do is find out which coordinate is of the top-left corner , top-right corner , bottom-left corner , bottom-right corner. As the order of contours in all the image will not be fixed we need to find it out as we have to map the top-left to [0,0] for new image and bottom-right to [449,449]  , as we are creating an image of [450,450] you can do it of whichever size you want , therefore we need to identify the correct order of corners otherwise we will get rotated images. The logic I choose to find the respective corners was : First take the sum of x , y coordinates TOP -LEFT has least sum and BOTTOM-RIGHT has the maximum sum. Now the difference  i.e y-x TOP-RIGHT has minimum and BOTTOM-LEFT has maximum sum.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">    <span class="kt">double</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+    <span class="kt">double</span> <span class="n">prevsum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+    <span class="kt">int</span> <span class="n">a</span><span class="p">;</span> 
+    <span class="kt">int</span> <span class="n">b</span><span class="p">;</span> 
+    <span class="kt">double</span> <span class="n">diff1</span><span class="p">;</span> 
+    <span class="kt">double</span> <span class="n">diff2</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">diffprev2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+    <span class="kt">double</span> <span class="n">diffprev</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">prevsum2</span><span class="o">=</span><span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="mi">0</span><span class="p">].</span><span class="n">x</span> <span class="o">+</span> <span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="mi">0</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+
+     <span class="kt">int</span> <span class="n">c</span><span class="p">;</span> <span class="kt">int</span> <span class="n">d</span><span class="p">;</span>
+     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+     <span class="p">{</span>
+         <span class="n">sum</span> <span class="o">=</span> <span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">+</span> <span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+         <span class="n">diff1</span> <span class="o">=</span> <span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+         <span class="n">diff2</span><span class="o">=</span> <span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">diff1</span> <span class="o">&gt;</span> <span class="n">diffprev</span><span class="p">)</span>
+       <span class="p">{</span>
+         <span class="n">diffprev</span> <span class="o">=</span> <span class="n">diff1</span><span class="p">;</span>
+         <span class="n">c</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+       <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">diff2</span> <span class="o">&gt;</span> <span class="n">diffprev2</span><span class="p">)</span>
+       <span class="p">{</span>
+          <span class="n">diffprev2</span> <span class="o">=</span> <span class="n">diff2</span><span class="p">;</span>
+          <span class="n">d</span><span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+       <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">&gt;</span> <span class="n">prevsum</span><span class="p">)</span>
+       <span class="p">{</span>
+          <span class="n">prevsum</span> <span class="o">=</span> <span class="n">sum</span><span class="p">;</span> <span class="n">a</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+       <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">&lt;</span> <span class="n">prevsum2</span><span class="p">)</span>
+       <span class="p">{</span>
+         <span class="n">prevsum2</span> <span class="o">=</span> <span class="n">sum</span><span class="p">;</span>
+          <span class="n">b</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+       <span class="p">}</span>
+     <span class="p">}</span></code></pre></figure>
+
+<p>Now we have 4 points in order and now we need corresponding points where they should be mapped.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">     <span class="n">Point2f</span> <span class="n">in</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+     <span class="n">Point2f</span> <span class="n">out</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+     <span class="n">in</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">a</span><span class="p">];</span>
+     <span class="n">in</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">b</span><span class="p">];</span>
+     <span class="n">in</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">c</span><span class="p">];</span>
+     <span class="n">in</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">contours</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">d</span><span class="p">];</span>
+     <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Point2f</span><span class="p">(</span><span class="mi">450</span><span class="p">,</span> <span class="mi">450</span><span class="p">);</span>
+     <span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Point2f</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+     <span class="n">out</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">Point2f</span><span class="p">(</span><span class="mi">450</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+     <span class="n">out</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">Point2f</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">450</span><span class="p">);</span></code></pre></figure>
+
+<p>Now we have the input and output array both what we need to do is apply prespective transformation to get the sudoku part required. Prespective transformation maps a point given by x, y in one quadilateral to a new point X ,Y in another quadilateral.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">     <span class="n">Mat</span> <span class="n">wrap</span><span class="p">;</span> <span class="n">Mat</span> <span class="n">mat</span><span class="p">;</span>
+     <span class="n">mat</span> <span class="o">=</span> <span class="n">Mat</span><span class="o">::</span><span class="n">zeros</span><span class="p">(</span><span class="n">src</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">src</span><span class="p">.</span><span class="n">type</span><span class="p">());</span>
+     <span class="n">wrap</span> <span class="o">=</span> <span class="n">getPerspectiveTransform</span><span class="p">(</span><span class="n">in</span><span class="p">,</span> <span class="n">out</span><span class="p">);</span>
+     <span class="n">warpPerspective</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">mat</span><span class="p">,</span> <span class="n">wrap</span><span class="p">,</span> <span class="n">Size</span><span class="p">(</span><span class="mi">450</span><span class="p">,</span> <span class="mi">450</span><span class="p">));</span></code></pre></figure>
+
+<h3 id="the-result-we-get-is">The result we get is:</h3>
+
+<p><img src="/assets/sudoku-solver/image4.png" alt="image" /></p>
+
+<p>Now apply the pre-processing as we did earlier and get the thresholded image and now we need to extract each grids centre the digit and then finally apply OCR.
+So, we can extract each grids as we know our image is a matrix of 450<em>450 and therefore our every sub grids will be a matrix of 50</em>50 so we can extract each grid by extracting the sub grids of 50*50 and store all the images in a vector.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">     <span class="kt">int</span> <span class="n">m</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">m</span> <span class="o">&lt;</span> <span class="mi">450</span><span class="p">;</span> <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">50</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">450</span><span class="p">;</span> <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">50</span><span class="p">)</span>
+          <span class="p">{</span>
+             <span class="n">smallimage</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">(</span><span class="n">thresholded31</span><span class="p">,</span> <span class="n">cv</span><span class="o">::</span><span class="n">Rect</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">));</span>
+             <span class="n">smallt</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">smallimage</span><span class="p">);</span>
+           <span class="p">}</span>
+     <span class="p">}</span></code></pre></figure>
+
+<p>Now we have each small grid and it may contain digits or not so we will set a threshold pixel if the image contains pixels greater than that then it may contain a digit otherwise it doesnot and now the images with pixels greater than threshold you need to extract the digit and center it rather than testing the image directly as it will increase the changes of correct recogniton. We can extract the digit and centre it in same way as we extracted the main grid , find the  contour  and bound it by rectangle and find the bounding rectangle with greatest area then resize it.(Assumption : the subgrids containing digits will have the digits as the main part).</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">      <span class="n">thresholded32</span><span class="o">=</span><span class="n">smallt</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">clone</span><span class="p">();</span>
+      <span class="n">vector</span> <span class="o">&lt;</span> <span class="n">vector</span>  <span class="o">&gt;</span><span class="n">contours2</span><span class="p">;</span>
+      <span class="n">findContours</span><span class="p">(</span><span class="n">thresholded32</span><span class="p">,</span> <span class="n">contours2</span><span class="p">,</span> <span class="n">CV_RETR_LIST</span><span class="p">,</span><span class="n">CV_CHAIN_APPROX_SIMPLE</span><span class="p">);</span>
+      <span class="n">Rect</span> <span class="n">prevb</span><span class="p">;</span> <span class="kt">double</span> <span class="n">areaprev</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="kt">double</span> <span class="n">area2</span><span class="p">;</span> <span class="kt">int</span> <span class="n">q</span><span class="p">;</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">contours2</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+         <span class="p">{</span>
+             <span class="n">Rect</span> <span class="n">bnd</span> <span class="o">=</span> <span class="n">boundingRect</span><span class="p">(</span><span class="n">contours2</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+             <span class="n">area2</span> <span class="o">=</span> <span class="n">bnd</span><span class="p">.</span><span class="n">height</span><span class="o">*</span><span class="n">bnd</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
+               <span class="k">if</span> <span class="p">(</span><span class="n">area2</span> <span class="o">&gt;</span> <span class="n">areaprev</span><span class="p">)</span>
+              <span class="p">{</span>
+                       <span class="n">prevb</span> <span class="o">=</span> <span class="n">bnd</span><span class="p">;</span>
+                       <span class="n">areaprev</span> <span class="o">=</span> <span class="n">area2</span><span class="p">;</span>
+                       <span class="n">q</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+               <span class="p">}</span>
+           <span class="p">}</span>
+      <span class="n">Rect</span> <span class="n">rec</span> <span class="o">=</span> <span class="n">prevb</span><span class="p">;</span>
+      <span class="n">regionOfInterest</span> <span class="o">=</span> <span class="n">smallt</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">rec</span><span class="p">);</span>
+      <span class="n">resize</span><span class="p">(</span><span class="n">regionOfInterest</span><span class="p">,</span> <span class="n">img12</span><span class="p">,</span> <span class="n">Size</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">16</span><span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">INTER_NEAREST</span><span class="p">);</span></code></pre></figure>
+
+<h3 id="the-results-is-as-follows">The results is as follows:</h3>
+
+<p><img src="/assets/sudoku-solver/image5.png" alt="image" />
+<img src="/assets/sudoku-solver/image6.png" alt="image" />
+<img src="/assets/sudoku-solver/image7.png" alt="image" /></p>
+
+<p>Now we have all the digits centered what we now need to do is apply OCR . There are huge number of techniques for implementing OCR and huge number of pattern recognition algorithm and for my implementation i choose K-Nearest Neighbour algorithm as it is already available in OpenCV library.The algorithm caches all training samples and predicts responses for new sample by analyzing a certain number of the nearest neighbour of the sample using voting and calculated mean. For it you need to create sample data and train those images and recognise digits from previously trained data. I created training samples by collecting images from various sudoku .My training data can be found out on this <a href="https://drive.google.com/open?id=0ByDK_y_Ss5KbSFJkU19fSG15QXc">link</a>.</p>
+
+<p><strong>This is the code for training the data :</strong></p>
+
+<figure class="highlight"><pre><code class="language-c--" data-lang="c++">      <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">797</span><span class="p">;</span>
+      <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">16</span><span class="p">;</span>
+      <span class="n">Mat</span> <span class="n">trainData</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">(</span><span class="n">Size</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">num</span><span class="p">),</span> <span class="n">CV_32FC1</span><span class="p">);</span>
+      <span class="n">Mat</span> <span class="n">responces</span> <span class="o">=</span> <span class="n">Mat</span><span class="p">(</span><span class="n">Size</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num</span><span class="p">),</span> <span class="n">CV_32FC1</span><span class="p">);</span>
+      <span class="kt">int</span> <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="mi">9</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="c1">// reading the images from the folder of tarining sample
+</span>
+        <span class="kt">DIR</span> <span class="o">*</span><span class="n">dir</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="n">dirent</span> <span class="o">*</span><span class="n">ent</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="n">pathToImages</span><span class="p">[]</span><span class="o">=</span><span class="s">"./digits3"</span><span class="p">;</span> <span class="c1">// name of the folder containing images;
+</span>
+        <span class="kt">char</span> <span class="n">path</span><span class="p">[</span><span class="mi">255</span><span class="p">];</span>
+        <span class="n">sprintf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">"%s/%d"</span><span class="p">,</span> <span class="n">pathToImages</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">dir</span> <span class="o">=</span> <span class="n">opendir</span><span class="p">(</span><span class="n">path</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="p">{</span>
+          <span class="k">while</span> <span class="p">((</span><span class="n">ent</span> <span class="o">=</span> <span class="n">readdir</span> <span class="p">(</span><span class="n">dir</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+          <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">ent</span><span class="o">-&gt;</span><span class="n">d_name</span><span class="p">,</span> <span class="s">"."</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">strcmp</span><span class="p">(</span><span class="n">ent</span><span class="o">-&gt;</span><span class="n">d_name</span><span class="p">,</span> <span class="s">".."</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
+            <span class="p">{</span>
+              <span class="kt">char</span> <span class="n">text</span><span class="p">[</span><span class="mi">255</span><span class="p">];</span>
+              <span class="n">sprintf</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="s">"/%s"</span><span class="p">,</span><span class="n">ent</span><span class="o">-&gt;</span><span class="n">d_name</span><span class="p">);</span>
+              <span class="n">string</span> <span class="n">digit</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>
+              <span class="n">digit</span><span class="o">=</span><span class="n">path</span><span class="o">+</span><span class="n">digit</span><span class="p">;</span>
+              <span class="n">Mat</span> <span class="n">mat</span><span class="o">=</span><span class="n">imread</span><span class="p">(</span><span class="n">digit</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span> <span class="c1">//loading the image
+</span>
+              <span class="n">cvtColor</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span><span class="n">mat</span><span class="p">,</span><span class="n">CV_BGR2GRAY</span><span class="p">);</span>  <span class="c1">//converting into grayscale
+</span>
+              <span class="n">threshold</span><span class="p">(</span><span class="n">mat</span> <span class="p">,</span> <span class="n">mat</span> <span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">255</span> <span class="p">,</span><span class="n">THRESH_OTSU</span><span class="p">);</span> <span class="c1">// preprocessing
+</span>
+              <span class="n">mat</span><span class="p">.</span><span class="n">convertTo</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span><span class="n">CV_32FC1</span><span class="p">,</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">255.0</span><span class="p">);</span> <span class="c1">//necessary to convert images to CV_32FC1 for using K nearest neighbour algorithm.
+</span>
+              <span class="n">resize</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">mat</span><span class="p">,</span> <span class="n">Size</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">16</span> <span class="p">),</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">INTER_NEAREST</span><span class="p">);</span> <span class="c1">// same size as our testing samples
+</span>
+              <span class="n">mat</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+              <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">k</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span><span class="n">k</span><span class="o">++</span><span class="p">)</span> 
+              <span class="p">{</span> 
+               <span class="n">trainData</span><span class="p">.</span><span class="n">at</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">counter</span><span class="o">*</span><span class="n">size</span><span class="o">+</span><span class="n">k</span><span class="p">)</span> <span class="o">=</span> <span class="n">mat</span><span class="p">.</span><span class="n">at</span><span class="o">&lt;</span><span class="kt">float</span><span class="p">(</span><span class="n">k</span><span class="p">);</span> <span class="c1">// storing the pixels of the image
+</span>
+              <span class="p">}</span>
+              <span class="n">responces</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="c1">// stroing the responce corresponding to image
+</span>
+              <span class="n">counter</span><span class="o">++</span><span class="p">;</span>
+             <span class="p">}</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+          <span class="n">closedir</span><span class="p">(</span><span class="n">dir</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">KNearest</span> <span class="n">knearest</span><span class="p">(</span><span class="n">trainData</span><span class="p">,</span><span class="n">responces</span>  <span class="p">);</span>
+        <span class="n">knearest</span><span class="p">.</span><span class="n">train</span><span class="p">(</span><span class="n">trainData</span><span class="p">,</span><span class="n">responces</span><span class="p">);</span></code></pre></figure>
+
+<p>This trains the data and to recognise the number we use the find_nearest of the KNearest class in OpenCV library.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">     <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">k</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span><span class="n">k</span><span class="o">++</span><span class="p">)</span>
+     <span class="p">{</span>
+     <span class="n">img123</span><span class="p">.</span><span class="n">at</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">=</span><span class="n">img12</span><span class="p">.</span><span class="n">at</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">k</span><span class="p">);</span> <span class="c1">// storing the pixels value of testing sample into a new mat for testing
+</span>
+     <span class="p">}</span>
+     <span class="kt">float</span> <span class="n">p</span><span class="o">=</span><span class="n">knearest</span><span class="p">.</span><span class="n">find_nearest</span><span class="p">(</span><span class="n">img123</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="p">);</span></code></pre></figure>
+
+<p>The accuracy of this method is upto 90% . So to increase the accuracy you may increase number of the training samples but it may not give very good results ,so to improve the accuracy try out other algorithms available which are more accurate.</p>
+
+<p>Although,I did not get 100% correct results but anyways it was overall a great learning experience.</p>
+
+<p>The whole source code can be found <a href="https://drive.google.com/open?id=0ByDK_y_Ss5KbS2xtQ0pEOGxkV1E">here</a>.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/blog/2016/07/smps/" data-toggle="tooltip" data-placement="top" title="Switched Mode Power Supply Technology">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/blog/2016/08/sound-meter/" data-toggle="tooltip" data-placement="top" title="Making a Sound Meter in Python">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+    </div>
+
+    
+<script>
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'eciitb';
+	var disqus_identifier = '/blog/2016/07/sudoku-solver';
+	var disqus_url = 'https://elec-club-iitb.github.io/blog/2016/07/sudoku-solver/';
+	var disqus_developer = 1; /* developer mode is on */
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var add = function(disqus_script) {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'https://' + disqus_shortname + '.disqus.com/' + disqus_script;
+			(document.getElementsByTagName('head')[0] || document.getElementsByID('disqus')[0]).appendChild(dsq);
+		}
+		add('embed.js');
+		add('count.js');
+	})();
+</script>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!--<li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    -->
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/elec-club-iitb">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Electronics Club, IIT Bombay 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/slick/slick.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js"></script>
+
+    <a href="#" class="go-top" style="
+	position: fixed;
+	bottom: 4em;
+	right: 4em;
+	text-decoration: none;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.3);
+	font-size: 12px;
+	padding: 1em;
+	display: none;
+
+	.go-top:hover {
+	background-color: rgba(0, 0, 0, 0.6);"}>
+	Go Top
+	</a>
+<script type="text/javascript">$(document).ready(function() {
+			// Show or hide the sticky footer button
+			$(window).scroll(function() {
+				if ($(this).scrollTop() > 200) {
+					$('.go-top').fadeIn(200);
+				} else {
+					$('.go-top').fadeOut(200);
+				}
+			});
+			
+			// Animate the scroll to top
+			$('.go-top').click(function(event) {
+				event.preventDefault();
+				
+				$('html, body').animate({scrollTop: 0}, 1000);
+			})
+		});
+</script>
+<!--Smooth scroll -->
+<script type="text/javascript">
+	$(function() {
+  $('a[href*="#"]:not([href="#"])').click(function() {
+    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+      var target = $(this.hash);
+      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+      if (target.length) {
+        $('html, body').animate({
+          scrollTop: target.offset().top
+        }, 1000);
+        return false;
+      }
+    }
+  });
+});
+</script>
+
+<!--Smooth transition-->
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('body').css('display', 'none');
+		$('body').fadeIn(1500);
+		$('.link').click(function(event) {
+		event.preventDefault();
+		newLocation = this.href;
+		$('body').fadeOut(1000, newpage);
+	});
+	function newpage() {
+		window.location = newLocation;
+	}
+	});
+</script>
+</body>
+
+</html>

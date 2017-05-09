@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Website for The Electronics Club of IIT Bombay. Electronics Club is a group of electronics enthusiasts in IITB who conduct sessions and events on electronics for the community.">
+
+    <title>Meanshift Algorithm for Image Processing - Electronics Club, IIT Bombay</title>
+
+    <link rel="canonical" href="https://elec-club-iitb.github.io/blog/2016/03/meanshift-algorithm-for-image-processing/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Profile -->
+    <link rel="stylesheet" href="/css/profile.css">    
+
+    <!-- Slick carousel -->
+    <link rel="stylesheet" type="text/css" href="/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="/slick/slick-theme.css"/>
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <link rel="shortcut icon" href="/assets/ico/favicon.png">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!--% feed_meta %}-->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-74765045-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img alt="logo" class="logo" src="/assets/ico/logo.png"></img>
+                Electronics Club, IIT Bombay
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/blog">Blog</a>
+                </li>
+                
+                <li>
+                    <a href="/tutorials">Tutorials</a>
+                </li>
+                
+                <li>
+                    <a href="/events">Events</a>
+                </li>
+                
+                <li>
+                    <a href="/chat">Chat</a>
+                </li>
+                
+                <li>
+                    <a href="/teampage">Team</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <div class="content-wrapper">
+        <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/assets/meanshift-algorithm-for-image-processing/cover.png')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Meanshift Algorithm for Image Processing</h1>
+                    
+                    <h3 class="subheading">A very basic, yet essential, algorithm for removing noise and forming Clusters in an image.</h3>
+                    
+                    <h4 class="meta">
+                        <b>Category:</b> Informative 
+                        <b>Tags:</b> Algorithms, Mean Shift Algorithm
+                    </h4>
+                    <span class="meta">Posted by Dhruv Ilesh Shah on March 24, 2016</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 content-wrapper">
+
+                <p><strong><u>Pre-requisites</u></strong> - Basic idea of matrices(wrt pixels), a <a href="https://en.wikipedia.org/wiki/Kernel_(image_processing)">kernel or convolution matrix</a>, local binary patterns, high-school statistics principles and <em>enthu</em>!
+<img src="/assets/meanshift-algorithm-for-image-processing/demo_org.png" alt="Original Image" /> <img src="/assets/meanshift-algorithm-for-image-processing/demo_4.png" alt="Image after using the algorithm" /> <br />
+One of the most common and important applications of Image Processing remains <em>Edge-Detection</em>. The ‘algorithm’ followed for <a href="https://en.wikipedia.org/wiki/Canny_edge_detector">Canny-edge Detection</a> is as follows:</p>
+
+<ul>
+  <li>Apply a suitable filter to smooth the image in order to remove the noise</li>
+  <li>Find the intensity gradients of the image</li>
+  <li>Apply non-maximum suppression to get rid of spurious response to edge detection</li>
+  <li>Apply double threshold to determine potential edges</li>
+  <li>Track edge by hysteresis: Finalize the detection of edges by suppressing all the other edges that are weak and not connected to strong edges</li>
+</ul>
+
+<p>As you can see, the most very first step involves filtering and removal of the noise. <br />
+<strong>WHAT IS THIS <em>NOISE</em>?</strong>
+In the sense used here, <em>noise</em> refers to subtle variations in pixel definitions, that may be recognised as an edge, but is most certainly not one. In the same sense as signals, it is unwanted in this purpose and needs to reduced.</p>
+
+<h2 id="the-statistics">The Statistics</h2>
+<p>The algorithm, in simple words, involves replacing each pixel definition with one obtained by applying the kernel on it - in general, forming a sort of mean application - which is similar to averaging out and minimising the noise.</p>
+
+<p><img src="/assets/meanshift-algorithm-for-image-processing/meanshift_fx.png" alt="Meanshift Principle" /></p>
+
+<p>Here, <em>g</em> refers to the Kernel operation applied on each element Xi, where X is an assumed mean and <em>h</em> is a parameter called <u>resolution</u>. The obtained expression m(x) is referred to as the Mean Shift, on following this procedure for a large number of times, this m(x) converges to zero. We wish to minimise this m(x), without losing much information, so that further techniques of gradient can be applied for edge-detection. This is similar to <a href="http://mathworld.wolfram.com/JacobiMethod.html">Jacobi’s Method</a> of iteration.</p>
+
+<h2 id="the-algorithm">The Algorithm</h2>
+<p>Now, coming to the real application part of the algorithm, this method involves applying a suitable convulation matrix to the image matrix to smoothen out the edges. This matrix can be of various types, and optimised for better results. Some simple types include:</p>
+
+<ol>
+  <li>Flat Kernel (linear)</li>
+  <li>Gaussian Kernel (exponential)</li>
+  <li>Epanechikov Kernel (quadratic)</li>
+</ol>
+
+<p>The simplest of these is the Flat Kernel, in which the pixel’s value is changed to the averaged value of it’s surroundings, with equal weight to each pixel. <img src="/assets/meanshift-algorithm-for-image-processing/flat_kernel.png" alt="Flat Kernel" /></p>
+
+<p>A sample code for this algorithm, implemented in ‘MATLAB’,  is as follows:</p>
+
+<figure class="highlight"><pre><code class="language-matlab" data-lang="matlab">	<span class="n">it</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span> <span class="c1">%set the number of iterations of the algorithm</span>
+	<span class="k">for</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">it</span>
+    	<span class="k">for</span> <span class="nb">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">:</span><span class="n">nx</span><span class="o">-</span><span class="mi">2</span>
+        	<span class="k">for</span> <span class="nb">j</span> <span class="o">=</span> <span class="mi">2</span><span class="p">:</span><span class="n">ny</span><span class="o">-</span><span class="mi">2</span>
+            	<span class="n">Vt</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="nb">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="nb">j</span><span class="p">)</span> <span class="o">+</span> <span class="n">V</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">V</span><span class="p">(</span><span class="nb">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="nb">j</span><span class="p">)</span> <span class="o">+</span> <span class="n">V</span><span class="p">(</span><span class="nb">i</span><span class="p">,</span><span class="nb">j</span><span class="o">-</span><span class="mi">1</span><span class="p">))/</span><span class="mi">4</span><span class="p">;</span> <span class="c1">% Kernel Definition</span>
+        	<span class="k">end</span>        
+    	<span class="k">end</span>
+    	<span class="n">V</span><span class="o">=</span><span class="n">Vt</span><span class="p">;</span>
+	<span class="k">end</span></code></pre></figure>
+
+<p>Here, V is the image matrix of ‘nx X ny’ and Vt is a dummy matrix of same size, used during the loop. The filter can be changed by altering the line marked as <em>Kernel Definition</em>.
+Basically, the algorithm can be used to merge modes and generate clusters.</p>
+
+<ul>
+  <li><em>Modes</em>- Modes refer to the peaks in color intensities in the pixel map. When plotted, these are the peaks in ‘3D-plot’.</li>
+  <li><em>Clusters</em>- Clusters refer to the groups of similarly defined pixels, ie, groups with similar color or compositon.</li>
+</ul>
+
+<p>As you can see in the images below, as the number of iterations increase, modes get merged and a cluser is formed.</p>
+
+<p><strong>THE PARAMETERS:</strong> The alterable parameters include:
+*‘it’ or the number of iterations. Increasing ‘it’ would increase the merge rate, but also increase the computational cost as number of iterations would increase. Hence, there is an optimised upper bound for this value.
+<img src="/assets/meanshift-algorithm-for-image-processing/Meanshift0.jpg" alt="Original Image - 2 modes" /> <img src="/assets/meanshift-algorithm-for-image-processing/Meanshift100.jpg" alt="100 Iterations" /> <img src="/assets/meanshift-algorithm-for-image-processing/Meanshift500.jpg" alt="500 Iterations" /></p>
+
+<p>*‘h’ or resolution is a parameter used in the statistical definition. Since it is in the denominator, it can play a huge role in the smoothening effect as shown. In general, a large ‘h’ would mean faster convergence, larger clusters and more loss of information. This value can be tweaked as desired, for optimal results.
+<img src="/assets/meanshift-algorithm-for-image-processing/meanshift_H_org.png" alt="Original Image" /> <img src="/assets/meanshift-algorithm-for-image-processing/meanshift_H_6.png" alt="h = 6" /> <img src="/assets/meanshift-algorithm-for-image-processing/meanshift_H_16.png" alt="h = 16" /></p>
+
+<p>For more such example, you can refer to <a href="https://www.inf.tu-dresden.de/content/institutes/ki/is/VORTRAG/Vortrag_Huong_Nguyen.pdf">this PDF</a>.</p>
+
+<p><strong>ADVANTAGES</strong>
+Comparing with other clustering algo K-means, it does not ASSUME any cluster etc. and the algo ensures that clusters are sorted automatically. Also, it is robust and works for any no. of (non-predefined) modes.</p>
+
+<p><strong>DRAWBACKS</strong>
+The iterative technique is highly redundant and computationally expensive; also, the method doesnt work well in free space (3D), as there may exist many local maximas that converge to optimas and mode isolation cannot be done.</p>
+
+<p>This concludes the summary of an essential algorithm in the art of Image Processing. Hope you enjoyed it!</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/blog/2016/03/glimpse-of-the-naive-bayes-classifier/" data-toggle="tooltip" data-placement="top" title="Glimpse Of The Naive Bayes' Classifier">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/blog/2016/04/getting-started-with-beaglebone-black/" data-toggle="tooltip" data-placement="top" title="Getting Started with Beaglebone Black">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+    </div>
+
+    
+<script>
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'eciitb';
+	var disqus_identifier = '/blog/2016/03/meanshift-algorithm-for-image-processing';
+	var disqus_url = 'https://elec-club-iitb.github.io/blog/2016/03/meanshift-algorithm-for-image-processing/';
+	var disqus_developer = 1; /* developer mode is on */
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var add = function(disqus_script) {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'https://' + disqus_shortname + '.disqus.com/' + disqus_script;
+			(document.getElementsByTagName('head')[0] || document.getElementsByID('disqus')[0]).appendChild(dsq);
+		}
+		add('embed.js');
+		add('count.js');
+	})();
+</script>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!--<li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    -->
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/elec-club-iitb">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Electronics Club, IIT Bombay 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/slick/slick.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js"></script>
+
+    <a href="#" class="go-top" style="
+	position: fixed;
+	bottom: 4em;
+	right: 4em;
+	text-decoration: none;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.3);
+	font-size: 12px;
+	padding: 1em;
+	display: none;
+
+	.go-top:hover {
+	background-color: rgba(0, 0, 0, 0.6);"}>
+	Go Top
+	</a>
+<script type="text/javascript">$(document).ready(function() {
+			// Show or hide the sticky footer button
+			$(window).scroll(function() {
+				if ($(this).scrollTop() > 200) {
+					$('.go-top').fadeIn(200);
+				} else {
+					$('.go-top').fadeOut(200);
+				}
+			});
+			
+			// Animate the scroll to top
+			$('.go-top').click(function(event) {
+				event.preventDefault();
+				
+				$('html, body').animate({scrollTop: 0}, 1000);
+			})
+		});
+</script>
+<!--Smooth scroll -->
+<script type="text/javascript">
+	$(function() {
+  $('a[href*="#"]:not([href="#"])').click(function() {
+    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+      var target = $(this.hash);
+      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+      if (target.length) {
+        $('html, body').animate({
+          scrollTop: target.offset().top
+        }, 1000);
+        return false;
+      }
+    }
+  });
+});
+</script>
+
+<!--Smooth transition-->
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('body').css('display', 'none');
+		$('body').fadeIn(1500);
+		$('.link').click(function(event) {
+		event.preventDefault();
+		newLocation = this.href;
+		$('body').fadeOut(1000, newpage);
+	});
+	function newpage() {
+		window.location = newLocation;
+	}
+	});
+</script>
+</body>
+
+</html>

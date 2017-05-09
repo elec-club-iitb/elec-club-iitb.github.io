@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Website for The Electronics Club of IIT Bombay. Electronics Club is a group of electronics enthusiasts in IITB who conduct sessions and events on electronics for the community.">
+
+    <title>Improving ADCs by intentionally adding noise - Electronics Club, IIT Bombay</title>
+
+    <link rel="canonical" href="https://elec-club-iitb.github.io/blog/2016/10/improving-adcs-with-noise/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Profile -->
+    <link rel="stylesheet" href="/css/profile.css">    
+
+    <!-- Slick carousel -->
+    <link rel="stylesheet" type="text/css" href="/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="/slick/slick-theme.css"/>
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <link rel="shortcut icon" href="/assets/ico/favicon.png">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!--% feed_meta %}-->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-74765045-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img alt="logo" class="logo" src="/assets/ico/logo.png"></img>
+                Electronics Club, IIT Bombay
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/blog">Blog</a>
+                </li>
+                
+                <li>
+                    <a href="/tutorials">Tutorials</a>
+                </li>
+                
+                <li>
+                    <a href="/events">Events</a>
+                </li>
+                
+                <li>
+                    <a href="/chat">Chat</a>
+                </li>
+                
+                <li>
+                    <a href="/teampage">Team</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <div class="content-wrapper">
+        <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/assets/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Improving ADCs by intentionally adding noise</h1>
+                    
+                    <h3 class="subheading">How noise addition helps in increasing accuracy of Analog to Digital conversion</h3>
+                    
+                    <h4 class="meta">
+                        <b>Category:</b> Informative 
+                        <b>Tags:</b> ADC, Dither
+                    </h4>
+                    <span class="meta">Posted by Meet Udeshi on October 29, 2016</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 content-wrapper">
+
+                <p>Everybody has this presumed notion that noise in an electronic system is bad.
+We all learn about ways to reduce noise in the circuits we implement to get
+better results. In this post we will see a case where intentionally <em>adding</em>
+noise to a system will give better results.</p>
+
+<h2 id="what-is-wrong-with-a-normal-adc">What is wrong with a normal ADC?</h2>
+
+<p>The purpose of an Analog to Digital converter is to obtain a digital value of
+an analog signal. Lets say we want to convert a signal which is between -1 to 1V.
+The analog version of this signal will be a real number and so can take one
+of infinitely many real values between -1 and 1. But the digital representation
+will only be able to take finite number of values because we only have a finite
+number of bits to encode the real number.</p>
+
+<p>We will have to <em>quantize</em> the signal i.e. pick the closest possible
+approximation of it from the set of possible values. For the sake of simplicity,
+lets assume we have just 1 bit to encode the signal. So the set of values our 
+digital signal can take is <script type="math/tex">\{0, 1\}</script>. Now it is clear that depending on the
+analog value we will have to <em>pick</em> one of 0 or 1 to represent this value as
+our digital signal. The analog signal will almost never equal to -1 or 1
+(try calculating the probability) so we will always get an error when we
+try to <em>quantize</em> our signal. This error is called <strong>Quantization Error</strong>.</p>
+
+<h2 id="there-is-already-an-error-and-you-want-to-add-more-noise">There is already an error and you want to add more noise?!</h2>
+
+<p>We will eventually see that intentionally adding noise will help <em>reduce</em>
+quantization error. This kind of intentionally added noise is so commonly used
+that it has its own name: Dither. Dither, apart from being used in ADCs is
+very widely used in image processing to display better quality images.
+See an example from <a href="https://en.wikipedia.org/wiki/Dither">the wikipedia page</a>:</p>
+
+<p><img src="//upload.wikimedia.org/wikipedia/commons/5/57/1_bit.png" alt="dithered leaf" /></p>
+
+<p>The image of this leaf has been represented using just the colour white(1) and
+black(0)! And yet it looks like it has various shades of grey! Lets see how
+this happens.</p>
+
+<h2 id="dither-in-adcs">Dither in ADCs</h2>
+
+<p>Continuing with the quantization example above, lets say we have a 1-bit ADC
+which gives output 0 if the input signal is negative and 1 if positive.
+If <script type="math/tex">X</script> is the digital output and <script type="math/tex">c</script> is the analog input (assumed constant),</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+X = 
+\begin{cases} 
+\hfill 0 \hfill & \text{ if $c \leq 0$} \\
+\hfill 1 \hfill & \text{ if $c > 0$} \\
+\end{cases}
+, c \in [-1,1] %]]></script>
+
+<p>If we add a dither <script type="math/tex">d(t)</script> to the analog input, the value of <script type="math/tex">X</script> will be
+decided by <script type="math/tex">c+d(t)</script>. Lets say we add a dither which is characterised by a 
+<a href="https://en.wikipedia.org/wiki/Uniform_distribution_(continuous)">uniform random variable</a>, so</p>
+
+<script type="math/tex; mode=display">d \sim \text{U}(-\frac{1}{2},\frac{1}{2})</script>
+
+<p>we will later see the significance of the range <script type="math/tex">-\frac{1}{2},\frac{1}{2}</script>.
+Cumulative density function of <script type="math/tex">d</script> will be</p>
+
+<script type="math/tex; mode=display">F_d(x) = x + \frac{1}{2}, x \in [-\frac{1}{2},\frac{1}{2}]</script>
+
+<p><script type="math/tex">X</script> is dependent on a random variable, hence <script type="math/tex">X</script> will also become a random
+variable. And because <script type="math/tex">X \in \{0,1\}</script> it will be a <a href="https://en.wikipedia.org/wiki/Bernoulli_distribution">Bernoulli random variable</a></p>
+
+<p>Hence,</p>
+
+<script type="math/tex; mode=display">X \sim \text{Ber}(p)</script>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{split}
+P(X = 1) & = P(c+d(t) > 0) = p \\
+ & = P(d(t) > -c) \\
+ & = 1 - P(d(t) \leq -c) \\
+ & = 1 - F_d(-c) \\
+ & = F_d(c) \\
+ & = c + \frac{1}{2}
+\end{split} %]]></script>
+
+<p>We get <script type="math/tex">X</script> to be a be a bernoulli variable with parameter dependent on our analog
+value!</p>
+
+<script type="math/tex; mode=display">X \sim \text{Ber}(c+\frac{1}{2})</script>
+
+<p>We can see that expected value of <script type="math/tex">X</script> is equal to <script type="math/tex">c + \frac{1}{2}</script> (because X is bernoulli).
+By the law of large numbers, we can say that if we take large number of samples of
+<script type="math/tex">X</script> (keeping <script type="math/tex">c</script> constant), the average value of these samples will converge
+to the expected value <script type="math/tex">c + \frac{1}{2}</script></p>
+
+<h2 id="block-diagram-for-adding-dither">Block diagram for adding dither</h2>
+
+<p><img src="/assets/improving-adcs-with-noise/block_diag.png" alt="block diagram" /></p>
+
+<p>The Sampler just reads the value of its input at <script type="math/tex">t = nT</script>, hence it gives
+a sample at every <script type="math/tex">T</script> seconds. From our previous derivation we can say that</p>
+
+<script type="math/tex; mode=display">\lim_{n\to\infty} \frac{1}{n}\sum_{n=0}^1 X[n] = c + \frac{1}{2}</script>
+
+<p>The problem here is that taking an infinite number of samples will take infinite
+time which is impractical. But we can say that the larger number of samples we
+the better accuracy in value of <script type="math/tex">c</script> we will get. 
+If we take <script type="math/tex">n</script> samples, we can see that the average of <script type="math/tex">X[n]</script> will take one
+of <script type="math/tex">n</script> values from the set <script type="math/tex">\{0,\frac{1}{n},\frac{2}{n},...,\frac{n}{n}\}</script>.</p>
+
+<p>We thus have quantized <script type="math/tex">c</script> to <script type="math/tex">n</script> distinct values or <script type="math/tex">\text{log}_2(n)</script> bits
+using a 1-bit ADC!</p>
+
+<h2 id="dither-in-images">Dither in images</h2>
+
+<p>Lets take a look at the leaf image once again. Observe that a greyscale image has
+been approximated here using two distinct values (black and white) i.e. a 1-bit value.
+Such an image is called a binary image.</p>
+
+<p><img src="//upload.wikimedia.org/wikipedia/commons/5/57/1_bit.png" alt="dithered leaf" /></p>
+
+<p>Lets say the greyscale had values for every pixel as a real number
+between 0 and 1, 0 corresponding to full black and 1 corresponding to full white.
+There would be regions in this image with similar values of grey. For e.g.
+take the section of the top of the leaf. It is a region of light grey (value<script type="math/tex">=c>\frac{1}{2}</script>).
+If we convert this region directly to binary, the whole region will become white.
+Similarly we would get a large patches of black and white all over the image 
+which would be a pretty inaccurate depiction of the greyscale image.</p>
+
+<p>Now if we add dither to that small region of similar greyscale value 
+and then convert to binary image, the probability of getting a white pixel
+will be proportional to the value of that region (<script type="math/tex">=c</script>). If the region has 100
+pixels, instead of all 100 being converted to white pixels, <script type="math/tex">100c</script> pixels will be
+white and <script type="math/tex">100(1-c)</script> will be black. On average that will look like the region is
+grey with value <script type="math/tex">c</script>.</p>
+
+<p>We can say that the average value of a small region in the binary image will be 
+close to the greyscale value of that small region in the real image.
+Hence we can see that dither gives us a better approximation after quantization.</p>
+
+<p><em>Note: The leaf image is using a slightly better algorithm than just adding dither
+and converting to binary (Random dithering). Such an image would look much worse, so for representative
+purposes I have used this image. You can read more about better algorithms on the
+wikipedia page of Dither</em></p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/blog/2016/09/get-electrified-2/" data-toggle="tooltip" data-placement="top" title="Get Electrified 2">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/blog/2017/04/get-electrified-3/" data-toggle="tooltip" data-placement="top" title="Get Electrified 3">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+    </div>
+
+    
+<script>
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'eciitb';
+	var disqus_identifier = '/blog/2016/10/improving-adcs-with-noise';
+	var disqus_url = 'https://elec-club-iitb.github.io/blog/2016/10/improving-adcs-with-noise/';
+	var disqus_developer = 1; /* developer mode is on */
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var add = function(disqus_script) {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'https://' + disqus_shortname + '.disqus.com/' + disqus_script;
+			(document.getElementsByTagName('head')[0] || document.getElementsByID('disqus')[0]).appendChild(dsq);
+		}
+		add('embed.js');
+		add('count.js');
+	})();
+</script>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!--<li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    -->
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/elec-club-iitb">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Electronics Club, IIT Bombay 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/slick/slick.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js"></script>
+
+    <a href="#" class="go-top" style="
+	position: fixed;
+	bottom: 4em;
+	right: 4em;
+	text-decoration: none;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.3);
+	font-size: 12px;
+	padding: 1em;
+	display: none;
+
+	.go-top:hover {
+	background-color: rgba(0, 0, 0, 0.6);"}>
+	Go Top
+	</a>
+<script type="text/javascript">$(document).ready(function() {
+			// Show or hide the sticky footer button
+			$(window).scroll(function() {
+				if ($(this).scrollTop() > 200) {
+					$('.go-top').fadeIn(200);
+				} else {
+					$('.go-top').fadeOut(200);
+				}
+			});
+			
+			// Animate the scroll to top
+			$('.go-top').click(function(event) {
+				event.preventDefault();
+				
+				$('html, body').animate({scrollTop: 0}, 1000);
+			})
+		});
+</script>
+<!--Smooth scroll -->
+<script type="text/javascript">
+	$(function() {
+  $('a[href*="#"]:not([href="#"])').click(function() {
+    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+      var target = $(this.hash);
+      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+      if (target.length) {
+        $('html, body').animate({
+          scrollTop: target.offset().top
+        }, 1000);
+        return false;
+      }
+    }
+  });
+});
+</script>
+
+<!--Smooth transition-->
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('body').css('display', 'none');
+		$('body').fadeIn(1500);
+		$('.link').click(function(event) {
+		event.preventDefault();
+		newLocation = this.href;
+		$('body').fadeOut(1000, newpage);
+	});
+	function newpage() {
+		window.location = newLocation;
+	}
+	});
+</script>
+</body>
+
+</html>

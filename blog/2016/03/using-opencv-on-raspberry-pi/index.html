@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Website for The Electronics Club of IIT Bombay. Electronics Club is a group of electronics enthusiasts in IITB who conduct sessions and events on electronics for the community.">
+
+    <title>Using OpenCV on Raspberry-Pi - Electronics Club, IIT Bombay</title>
+
+    <link rel="canonical" href="https://elec-club-iitb.github.io/blog/2016/03/using-opencv-on-raspberry-pi/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Profile -->
+    <link rel="stylesheet" href="/css/profile.css">    
+
+    <!-- Slick carousel -->
+    <link rel="stylesheet" type="text/css" href="/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="/slick/slick-theme.css"/>
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <link rel="shortcut icon" href="/assets/ico/favicon.png">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!--% feed_meta %}-->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-74765045-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img alt="logo" class="logo" src="/assets/ico/logo.png"></img>
+                Electronics Club, IIT Bombay
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/blog">Blog</a>
+                </li>
+                
+                <li>
+                    <a href="/tutorials">Tutorials</a>
+                </li>
+                
+                <li>
+                    <a href="/events">Events</a>
+                </li>
+                
+                <li>
+                    <a href="/chat">Chat</a>
+                </li>
+                
+                <li>
+                    <a href="/teampage">Team</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <div class="content-wrapper">
+        <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/assets/img/home-bg.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Using OpenCV on Raspberry-Pi</h1>
+                    
+                    <h3 class="subheading">Getting OpenCV installed and running on Rpi, with necessary scripts and files</h3>
+                    
+                    <h4 class="meta">
+                        <b>Category:</b> Tutorials 
+                        <b>Tags:</b> Raspberry Pi, OpenCV
+                    </h4>
+                    <span class="meta">Posted by Riddhish Bhalodia on March 7, 2016</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 content-wrapper">
+
+                <p><img src="/assets/using-opencv-on-raspberry-pi/rpi.jpeg" alt="raspberry pi logo" /></p>
+
+<p>Raspberry Pi is slowly finding a lot of applications related to image processing. I am going to provide a little overview of how one can get OpenCV up and running on your pi. I will be using tightVNC server for getting the display.</p>
+
+<p>The first step is getting OpenCV installed on your pi, we will follow the exact same procedure of installing OpenCV which I use on ubuntu. I will show you step by step on how to get your opencv setup on rpi ready.</p>
+
+<p><strong><u>Step Zero</u></strong></p>
+
+<p>Before we begin, I will tell you how my pi is connected so there is no confusion after moving further.<br />
+I have my pi connected to my wi-fi router with a LAN cable and have changed it to a <em>static IP configuration.</em> I am accessing it through my terminal using the ssh channel. In short what I have now and what you should have is a rpi with it’s terminal. If you are totally new to rpi, I suggest you to take a look at these tutorials for setting up your pi <a href="/tutorials/r_pi">get you pi up and running</a>.</p>
+
+<p><strong><u>Step One</u></strong></p>
+
+<p>Install tightvncserver on the rpi as well as your linux powered laptop/desktop where you plan to get the display window of your pi. You can do that by a simple command <code class="highlighter-rouge">sudo apt-get install tightvncserver</code></p>
+
+<p><strong><u>Step Two</u></strong></p>
+
+<p>Now we start the vnc-server in the rpi, this will broadcast the “screen” of the rpi over the server, which then can be accessed remotely from some other laptop/desktop connected with the same server. In order to do this we need to run the following command on the rpi terminal:<br />
+<code class="highlighter-rouge">vncserver :1 -geometry 1366x600 -depth 16 -pixelformat rgb565</code><br />
+If you are doing this for the first time then it will ask you for setting a password (Yes, you need to remember it!). After finishing that you should see the following on the rpi’s terminal.<br />
+<code class="highlighter-rouge">#New ‘X’ desktop is raspberrypi:1</code><br />
+This means you have successfully got your rpi desktop put up on your server, now you need to access it.</p>
+
+<p><strong><u>Step Three</u></strong></p>
+
+<p>Now using the laptop/desktop’s terminal and execute this command:<br />
+<code class="highlighter-rouge">vncviewer rpi_ip:5901</code><br />
+Here, rpi_ip is the static IP which you would have set for your pi. You will be asked for a password which you have set in the previous step, and then voila!. :D</p>
+
+<p><strong><u>Step Four</u></strong></p>
+
+<p>Now all you need is to get opencv installed on your rpi. To get that done just follow the steps which you will use to install opencv in normal ubuntu based system, if you are comfortable with it then this tutorial stops here for you.For OpenCV installation Just follow the steps listed <a href="/assets/using-opencv-on-raspberry-pi/opencv installation.pdf">here(OpenCV installation on Ubuntu).</a><br />
+You will also need two scripts in above installation the opencv installation. Get them from here:<br />
+<a href="/assets/using-opencv-on-raspberry-pi/opencv2_4_6_1.sh">opencv2_4_6_1.sh</a><br />
+<a href="/assets/using-opencv-on-raspberry-pi/new">new</a></p>
+
+<p><strong>Thank You!</strong></p>
+
+<hr />
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/blog/2016/03/remote-controlling-a-bot-with-android/" data-toggle="tooltip" data-placement="top" title="Remote Controlling a bot with Android">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+    </div>
+
+    
+<script>
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'eciitb';
+	var disqus_identifier = '/blog/2016/03/using-opencv-on-raspberry-pi';
+	var disqus_url = 'https://elec-club-iitb.github.io/blog/2016/03/using-opencv-on-raspberry-pi/';
+	var disqus_developer = 1; /* developer mode is on */
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var add = function(disqus_script) {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'https://' + disqus_shortname + '.disqus.com/' + disqus_script;
+			(document.getElementsByTagName('head')[0] || document.getElementsByID('disqus')[0]).appendChild(dsq);
+		}
+		add('embed.js');
+		add('count.js');
+	})();
+</script>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!--<li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    -->
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/elec-club-iitb">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Electronics Club, IIT Bombay 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/slick/slick.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js"></script>
+
+    <a href="#" class="go-top" style="
+	position: fixed;
+	bottom: 4em;
+	right: 4em;
+	text-decoration: none;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.3);
+	font-size: 12px;
+	padding: 1em;
+	display: none;
+
+	.go-top:hover {
+	background-color: rgba(0, 0, 0, 0.6);"}>
+	Go Top
+	</a>
+<script type="text/javascript">$(document).ready(function() {
+			// Show or hide the sticky footer button
+			$(window).scroll(function() {
+				if ($(this).scrollTop() > 200) {
+					$('.go-top').fadeIn(200);
+				} else {
+					$('.go-top').fadeOut(200);
+				}
+			});
+			
+			// Animate the scroll to top
+			$('.go-top').click(function(event) {
+				event.preventDefault();
+				
+				$('html, body').animate({scrollTop: 0}, 1000);
+			})
+		});
+</script>
+<!--Smooth scroll -->
+<script type="text/javascript">
+	$(function() {
+  $('a[href*="#"]:not([href="#"])').click(function() {
+    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+      var target = $(this.hash);
+      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+      if (target.length) {
+        $('html, body').animate({
+          scrollTop: target.offset().top
+        }, 1000);
+        return false;
+      }
+    }
+  });
+});
+</script>
+
+<!--Smooth transition-->
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('body').css('display', 'none');
+		$('body').fadeIn(1500);
+		$('.link').click(function(event) {
+		event.preventDefault();
+		newLocation = this.href;
+		$('body').fadeOut(1000, newpage);
+	});
+	function newpage() {
+		window.location = newLocation;
+	}
+	});
+</script>
+</body>
+
+</html>

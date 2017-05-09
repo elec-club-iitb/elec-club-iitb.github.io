@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Website for The Electronics Club of IIT Bombay. Electronics Club is a group of electronics enthusiasts in IITB who conduct sessions and events on electronics for the community.">
+
+    <title>Deep Learning Based Image Classification - Electronics Club, IIT Bombay</title>
+
+    <link rel="canonical" href="https://elec-club-iitb.github.io/blog/2016/05/deep-learning-based-image-classification/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Profile -->
+    <link rel="stylesheet" href="/css/profile.css">    
+
+    <!-- Slick carousel -->
+    <link rel="stylesheet" type="text/css" href="/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="/slick/slick-theme.css"/>
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <link rel="shortcut icon" href="/assets/ico/favicon.png">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!--% feed_meta %}-->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-74765045-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img alt="logo" class="logo" src="/assets/ico/logo.png"></img>
+                Electronics Club, IIT Bombay
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/blog">Blog</a>
+                </li>
+                
+                <li>
+                    <a href="/tutorials">Tutorials</a>
+                </li>
+                
+                <li>
+                    <a href="/events">Events</a>
+                </li>
+                
+                <li>
+                    <a href="/chat">Chat</a>
+                </li>
+                
+                <li>
+                    <a href="/teampage">Team</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <div class="content-wrapper">
+        <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/assets/deep-learning-based-image-classification/cover.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Deep Learning Based Image Classification</h1>
+                    
+                    <h3 class="subheading">How deep neural networks can be taught to classify images using deep learning</h3>
+                    
+                    <h4 class="meta">
+                        <b>Category:</b> Informative 
+                        <b>Tags:</b> Neural Networks, Deep Learning
+                    </h4>
+                    <span class="meta">Posted by Yash Bhalgat on May 20, 2016</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 content-wrapper">
+
+                <h4 id="pre-requisites">Pre-requisites</h4>
+
+<p>Idea about Artificial Neural Networks, good if you
+have familiarity with the ideas of supervised learning, logistic
+regression, gradient descent, SVM-based classification, k-means
+clustering, kernel tricks like KPCA, etc.</p>
+
+<h4 id="motivation">Motivation</h4>
+
+<p>Deep neural networks (DNNs) trained via backpropagation
+were recently shown to perform well on image classification tasks with
+lakhs of training images and lot of categories. The feature
+representation learned by these networks achieves state-of-the-art
+performance not only on the classification task for which the network
+was trained, but also on various other visual recognition tasks, for
+example: classification on various dataset; scene recognition, etc. This
+capability to generalize to new datasets makes supervised CNN
+(Convolutional Neural Networks) training an attractive approach for
+generic visual feature learning.</p>
+
+<h3 id="what-is-deep-learning--what-makes-it-deep1">What is Deep Learning / What makes it “deep”<a href="http://www.nvidia.com/content/events/geoInt2015/LBrown_DL_Image_ClassificationGEOINT.pdf"><sup>1</sup></a>?</h3>
+
+<p><img src="/assets/deep-learning-based-image-classification/image02.png" alt="image" /></p>
+
+<ul>
+  <li>
+    <p>1 million parameters</p>
+  </li>
+  <li>
+    <p>10 mil images</p>
+  </li>
+  <li>
+    <p>10 layers!!</p>
+  </li>
+</ul>
+
+<p>That’s what makes it “deep”!</p>
+
+<p>Deep learning methods aim at learning feature hierarchies with features
+from higher levels of the hierarchy formed by the composition of lower
+level features. For image classification tasks, the most effective deep
+networks used nowadays are the Convolutional Neural Networks (others
+include corrNets, restricted Boltzmann machines, Recurrent Neural
+Networks, etc.).</p>
+
+<h3 id="image-classification-with-cnns">Image Classification with CNNs</h3>
+
+<p>Each CNN has its own architecture - convolution layers, pooling layers
+(max pooling, weighted mean pooling, etc), fully connected layers et al.</p>
+
+<p>Three methods of training using a Conv Net:</p>
+
+<ol>
+  <li>
+    <p>Supervised</p>
+  </li>
+  <li>
+    <p>Unsupervised</p>
+  </li>
+  <li>
+    <p>Reinforcement</p>
+  </li>
+</ol>
+
+<p><img src="/assets/deep-learning-based-image-classification/image05.png" alt="image" /></p>
+
+<p>The most common method is to learn the network using a huge set of
+training images. This approach is called the supervised learning of the
+network. To learn the network implied learning the filters in the
+convolution layer (filters are also called weights)</p>
+
+<p>It involves 2 phases - <em>Training</em> run and a accuracy <em>testing</em> run</p>
+
+<p>1) <strong>Training run:</strong> Pick a CNN architecture -&gt; Input a million
+training images spanning all categories -&gt; One or days of GPU
+computation</p>
+
+<p>2) <strong>Accuracy testing:</strong> If the accuracy is bad, fix the training set,
+tweak the training parameters -&gt; do it again</p>
+
+<p>CNN learnt with supervised learning give a high accuracy for
+classification tasks and the same network can be used for other tasks
+too, like scene detection.</p>
+
+<h3 id="introduction-of-discriminative-unsupervised-learning-in-neural-networks">Introduction of discriminative Unsupervised learning in Neural Networks</h3>
+
+<p>The downside of supervised training is the need for expensive labeling,
+as the amount of required labeled samples grows quickly the larger the
+model gets. For this reason, unsupervised learning remains an appealing
+paradigm, since it can make use of raw unlabeled images and videos.
+Furthermore, on vision tasks outside classification it is not even
+certain whether training based on object class labels is advantageous.
+For example, recent results show that it outperforms supervised feature
+learning also on descriptor matching.</p>
+
+<p>In Unsupervised learning, the filter (or weights) are not learnt
+directly from the training images. Sometimes, a predefined set of
+filters is chosen - best example being the Gabor filters - or the
+filters are extracted from the images ‘patches’ with some processing
+done on them.</p>
+
+<p><img src="/assets/deep-learning-based-image-classification/image04.png" alt="image" /></p>
+
+<p><strong>fig: MNIST dataset classification using k-means clustering</strong></p>
+
+<p>A common framework used in unsupervised feature learning is <a href="http://ai.stanford.edu/~ang/papers/aistats11-AnalysisSingleLayerUnsupervisedFeatureLearning.pdf"><sup>2</sup></a> :</p>
+
+<ol>
+  <li>
+    <p>Extract random patches from unlabeled training images.</p>
+  </li>
+  <li>
+    <p>Apply a pre-processing stage to the patches.</p>
+  </li>
+  <li>
+    <p>Learn a feature-mapping using an unsupervised learning algorithm.</p>
+  </li>
+</ol>
+
+<p>Given the learned feature mapping and a set of labeled training images
+we can then perform feature extraction and classification:</p>
+
+<ol>
+  <li>
+    <p>Extract features from equally spaced sub-patches covering the
+input image.</p>
+  </li>
+  <li>
+    <p>Pool features together over regions of the input image to reduce the
+number of feature values.</p>
+  </li>
+  <li>
+    <p>Train a classifier to predict the labels given the feature vectors.</p>
+  </li>
+</ol>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Image classification results can be hugely increased using some
+preprocessing (can be anything depending on the application). It is
+common practice to perform several simple normalization steps before
+attempting to generate features from data. In Unsupervised feature
+extraction, there are also some tricks like the <em>‘kernel trick’</em> which
+can improve the classification results.</p>
+
+<p>The feature vector length can always be reduced using some fully
+connected layers in the network. This can help speed-up the
+classification, but must be used carefully as to not compromise the
+accuracy. Much future work is going on in the direction of using
+unsupervised or semi-supervised neural networks, since as of now they
+are not very scalable.</p>
+
+<p>Deep learning, CNNs, corrNets, etc are THE most active fields in data
+analytics. And I believe can be learnt only through experimentation! So
+feel free to explore this ocean of deep learning! Enjoy!</p>
+
+<p>Regards,</p>
+
+<p>Yash Bhalgat.</p>
+
+<p>[1]: <a href="http://www.nvidia.com/content/events/geoInt2015/LBrown_DL_Image_ClassificationGEOINT.pdf">deep learning for image classification - Nvidia. 2015. 15 May.</a></p>
+
+<p>[2]: <a href="http://ai.stanford.edu/~ang/papers/aistats11-AnalysisSingleLayerUnsupervisedFeatureLearning.pdf">Coates, A. “An Analysis of Single-Layer Networks in Unsupervised Feature Learning.” 2011.</a></p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/blog/2016/05/burglar-alarm/" data-toggle="tooltip" data-placement="top" title="The Making of Burglar Alarm">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/blog/2016/05/fundamentals-of-a-slam-algorithm/" data-toggle="tooltip" data-placement="top" title="Fundamentals of a SLAM Algorithm">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+    </div>
+
+    
+<script>
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'eciitb';
+	var disqus_identifier = '/blog/2016/05/deep-learning-based-image-classification';
+	var disqus_url = 'https://elec-club-iitb.github.io/blog/2016/05/deep-learning-based-image-classification/';
+	var disqus_developer = 1; /* developer mode is on */
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var add = function(disqus_script) {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'https://' + disqus_shortname + '.disqus.com/' + disqus_script;
+			(document.getElementsByTagName('head')[0] || document.getElementsByID('disqus')[0]).appendChild(dsq);
+		}
+		add('embed.js');
+		add('count.js');
+	})();
+</script>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!--<li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    -->
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/elec-club-iitb">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Electronics Club, IIT Bombay 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/slick/slick.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js"></script>
+
+    <a href="#" class="go-top" style="
+	position: fixed;
+	bottom: 4em;
+	right: 4em;
+	text-decoration: none;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.3);
+	font-size: 12px;
+	padding: 1em;
+	display: none;
+
+	.go-top:hover {
+	background-color: rgba(0, 0, 0, 0.6);"}>
+	Go Top
+	</a>
+<script type="text/javascript">$(document).ready(function() {
+			// Show or hide the sticky footer button
+			$(window).scroll(function() {
+				if ($(this).scrollTop() > 200) {
+					$('.go-top').fadeIn(200);
+				} else {
+					$('.go-top').fadeOut(200);
+				}
+			});
+			
+			// Animate the scroll to top
+			$('.go-top').click(function(event) {
+				event.preventDefault();
+				
+				$('html, body').animate({scrollTop: 0}, 1000);
+			})
+		});
+</script>
+<!--Smooth scroll -->
+<script type="text/javascript">
+	$(function() {
+  $('a[href*="#"]:not([href="#"])').click(function() {
+    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+      var target = $(this.hash);
+      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+      if (target.length) {
+        $('html, body').animate({
+          scrollTop: target.offset().top
+        }, 1000);
+        return false;
+      }
+    }
+  });
+});
+</script>
+
+<!--Smooth transition-->
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('body').css('display', 'none');
+		$('body').fadeIn(1500);
+		$('.link').click(function(event) {
+		event.preventDefault();
+		newLocation = this.href;
+		$('body').fadeOut(1000, newpage);
+	});
+	function newpage() {
+		window.location = newLocation;
+	}
+	});
+</script>
+</body>
+
+</html>

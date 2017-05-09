@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+
+<channel>
+  <title>Electronics Club, IIT Bombay</title>
+  <link>https://elec-club-iitb.github.io/</link>
+  <description>Electronics Club, IIT Bombay - The electronics enthusiasts of IITB</description>
+  <lastBuildDate></lastBuildDate>
+  <copyright></copyright>
+
+  
+  <item>
+    <title><![CDATA[Get Electrified 3]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2017/04/get-electrified-3/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2017/04/get-electrified-3</guid>
+    <pubDate>Mon, 24 Apr 2017 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Improving ADCs by intentionally adding noise]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/10/improving-adcs-with-noise/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/10/improving-adcs-with-noise</guid>
+    <pubDate>Sat, 29 Oct 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Get Electrified 2]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/09/get-electrified-2/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/09/get-electrified-2</guid>
+    <pubDate>Thu, 29 Sep 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[The Tech Behind Games]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/08/the-tech-behind-games/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/08/the-tech-behind-games</guid>
+    <pubDate>Wed, 31 Aug 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Functioning of L293D motor driver]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/08/l293d/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/08/l293d</guid>
+    <pubDate>Sun, 14 Aug 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Making a Sound Meter in Python]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/08/sound-meter/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/08/sound-meter</guid>
+    <pubDate>Thu, 04 Aug 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Sudoku Solver]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/07/sudoku-solver/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/07/sudoku-solver</guid>
+    <pubDate>Sun, 31 Jul 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Switched Mode Power Supply Technology]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/07/smps/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/07/smps</guid>
+    <pubDate>Sun, 31 Jul 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Pulse Detection Circuit]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/07/pulse-detection-circuit/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/07/pulse-detection-circuit</guid>
+    <pubDate>Fri, 01 Jul 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Using Eagle to design PCBs]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/06/using-eagle-to-design-pcbs/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/06/using-eagle-to-design-pcbs</guid>
+    <pubDate>Mon, 06 Jun 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Path Finder Bot]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/05/path-finder-bot/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/05/path-finder-bot</guid>
+    <pubDate>Mon, 30 May 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Fundamentals of a SLAM Algorithm]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/05/fundamentals-of-a-slam-algorithm/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/05/fundamentals-of-a-slam-algorithm</guid>
+    <pubDate>Mon, 30 May 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Deep Learning Based Image Classification]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/05/deep-learning-based-image-classification/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/05/deep-learning-based-image-classification</guid>
+    <pubDate>Fri, 20 May 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[The Making of Burglar Alarm]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/05/burglar-alarm/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/05/burglar-alarm</guid>
+    <pubDate>Fri, 13 May 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Game Of Pong]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/05/game-of-pong/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/05/game-of-pong</guid>
+    <pubDate>Sun, 08 May 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Working of a Digital Light Processing Projector]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/05/working-of-a-dlp-projector/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/05/working-of-a-dlp-projector</guid>
+    <pubDate>Tue, 03 May 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Getting Started with Beaglebone Black]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/04/getting-started-with-beaglebone-black/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/04/getting-started-with-beaglebone-black</guid>
+    <pubDate>Tue, 26 Apr 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Meanshift Algorithm for Image Processing]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/03/meanshift-algorithm-for-image-processing/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/03/meanshift-algorithm-for-image-processing</guid>
+    <pubDate>Thu, 24 Mar 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Glimpse Of The Naive Bayes' Classifier]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/03/glimpse-of-the-naive-bayes-classifier/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/03/glimpse-of-the-naive-bayes-classifier</guid>
+    <pubDate>Tue, 15 Mar 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  <item>
+    <title><![CDATA[Remote Controlling a bot with Android]]></title>
+    <link>https://elec-club-iitb.github.io/blog/2016/03/remote-controlling-a-bot-with-android/</link>
+    <author> (eciitb@gmail.com)</author>
+    <guid>/blog/2016/03/remote-controlling-a-bot-with-android</guid>
+    <pubDate>Sat, 12 Mar 2016 00:00:00 +0100</pubDate>
+  </item>
+  
+  </channel>
+
+</rss>

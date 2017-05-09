@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Website for The Electronics Club of IIT Bombay. Electronics Club is a group of electronics enthusiasts in IITB who conduct sessions and events on electronics for the community.">
+
+    <title>Getting Started with Beaglebone Black - Electronics Club, IIT Bombay</title>
+
+    <link rel="canonical" href="https://elec-club-iitb.github.io/blog/2016/04/getting-started-with-beaglebone-black/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Profile -->
+    <link rel="stylesheet" href="/css/profile.css">    
+
+    <!-- Slick carousel -->
+    <link rel="stylesheet" type="text/css" href="/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="/slick/slick-theme.css"/>
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <link rel="shortcut icon" href="/assets/ico/favicon.png">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!--% feed_meta %}-->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-74765045-1', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <img alt="logo" class="logo" src="/assets/ico/logo.png"></img>
+                Electronics Club, IIT Bombay
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="/blog">Blog</a>
+                </li>
+                
+                <li>
+                    <a href="/tutorials">Tutorials</a>
+                </li>
+                
+                <li>
+                    <a href="/events">Events</a>
+                </li>
+                
+                <li>
+                    <a href="/chat">Chat</a>
+                </li>
+                
+                <li>
+                    <a href="/teampage">Team</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <div class="content-wrapper">
+        <!-- Post Header -->
+<header class="intro-header" style="background-image: url('/assets/getting-started-with-beaglebone-black/cover.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Getting Started with Beaglebone Black</h1>
+                    
+                    <h3 class="subheading">Simple tutorial on using the BBB.</h3>
+                    
+                    <h4 class="meta">
+                        <b>Category:</b> Tutorials 
+                        <b>Tags:</b> Programming, Development, Tutorial
+                    </h4>
+                    <span class="meta">Posted by Dhruv Ilesh Shah on April 26, 2016</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 content-wrapper">
+
+                <p><strong><u>You will need</u></strong> - A BeagleBone Black AM335x (an older version should also do.), a PC (I have used a Linux distribution), Ethernet Cables and Ports <i>and lots of patience.</i>
+<img src="/assets/getting-started-with-beaglebone-black/bbb.jpg" alt="The BeagleBone Black" />
+The BeagleBone Black is an embedded development board, just like the <a href="http://www.raspberrypi.org">Raspberry Pi</a>, <a href="https://www.arduino.cc/en/ArduinoCertified/IntelGalileo">Intel Galileo</a> etc. It offers several advantages over the others in the category, and also has its own demerits. We’ll get to that in the end. <br />
+For the specs, the BBB has a 1Ghz ARM Cortex-A8 and 512MB of DDR3 RAM on board - almost as capable as a medium range smartphone. It houses an on-board 8-bit 4GB flash memory which comes preloaded with the <em>Angstrom</em>. It has a total of 92 pins, of which 66 can be used as GPIO pins. For more specification, you may refer <a href="http://beagleboard.org/support/bone101">here</a>.
+<br /></p>
+
+<h2 id="getting-started">Getting Started</h2>
+<p>The BeagleBone is amazingly simple to start off with, and is indeed the most convenient of any embedded board, since it comes with a preloaded OS. There are multiple ways to access the BBB from your system, each of which will be described briefly.</p>
+
+<p>Connect the BBB via the USB cable provided in the box. The BBB can be directly accessed using the web browser, and programs can be executed using Bonescript, which is similar to JS. By default, your BBB comes with it’s IP address on <em>usb0</em> port as <code class="highlighter-rouge">192.168.7.2</code>. Enter this in your browser, and you are good to go. You can access the GPIO, and run programs with the BBB as your microcontroller, just like you run scripts in Arduino. A sample of the available functions can be seen <a href="http://beagleboard.org/support/bone101">here</a>.</p>
+
+<p>For accessing the <em>real capabilities of the board</em> as a computer in itself, you will need to do a little more, but fear not! Plug in the BBB using the USB cable, and go to your <em>terminal</em> (Windows users may have to use <a href="http://www.putty.org/">PuTTY</a>) and type:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">ssh</span> <span class="nx">yourIP</span> <span class="o">-</span><span class="nx">l</span> <span class="nx">root</span> <span class="c1">//or</span>
+<span class="nx">ssh</span> <span class="nx">root</span><span class="err">@</span><span class="nx">yourIP</span>
+<span class="c1">//You may have to use sudo, if permissions are an issue.</span>
+</code></pre>
+</div>
+<p>This will enable you to use the BBB as the root user. You will notice that the files and structure of the memory is similar to any other Linux distro. <em>The BBB is your very own credit-card sized computer!</em></p>
+
+<p>Now that you have entered the system, there exist no bounds to what can be done. Some packages as pre-installed, like <code class="highlighter-rouge">Python</code>, and can be used directly. Have fun tinkering with your cute little pup. To burn bonescripts, the browser sure is a cool bet!</p>
+
+<h2 id="using-the-beaglebone-black-remotely">Using the BeagleBone Black remotely</h2>
+<p>You have used the BBB by connecting it to your PC, but what if you want it to act independently, or on the network? There must be a way to access the board via a network, and not just USB. Turns out, there is - and much simpler than the R-Pi in this case! Here’s what you must do:</p>
+
+<ul>
+  <li>
+    <p>Connect the BBB to your system, as stated above. Enter the system using SSH and login as root (use the Terminal or PuTTY)</p>
+  </li>
+  <li>
+    <p>Run <code class="highlighter-rouge">cd /etc/network</code> and open the file <em>interfaces</em> using VI or nano.</p>
+  </li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">sudo</span> <span class="nx">vi</span> <span class="o">/</span><span class="nx">etc</span><span class="o">/</span><span class="nx">network</span><span class="o">/</span><span class="nx">interfaces</span> <span class="c1">//or</span>
+<span class="nx">sudo</span> <span class="nx">nano</span> <span class="o">/</span><span class="nx">etc</span><span class="o">/</span><span class="nx">network</span><span class="o">/</span><span class="nx">interfaces</span>
+<span class="c1">//sudo would be used if the user is not root.</span>
+</code></pre>
+</div>
+<ul>
+  <li>This opens the file interfaces. You will see the following lines written in the end.</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code> <span class="nx">iface</span> <span class="nx">usb0</span> <span class="nx">inet</span> <span class="kr">static</span>
+     <span class="nx">address</span> <span class="mf">192.168</span><span class="p">.</span><span class="mf">7.2</span>
+     <span class="nx">netmask</span> <span class="mf">255.255</span><span class="p">.</span><span class="mf">255.0</span>
+     <span class="nx">network</span> <span class="mf">192.168</span><span class="p">.</span><span class="mf">7.0</span>
+</code></pre>
+</div>
+<p>This defines the action performed when the BBB is connected via USB. (Note <code class="highlighter-rouge">usb0</code>) You can choose to keep this or comment it out depending on usage. Now, let’s go on with the task of setting it up remotely.</p>
+
+<ul>
+  <li>Here, I’m using LAN for that purpose. Before starting, create a backup of the file so that you have something to go back to - messing up is allowed!</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">cd</span> <span class="o">/</span><span class="nx">etc</span><span class="o">/</span><span class="nx">network</span>
+<span class="nx">cp</span> <span class="nx">interfaces</span> <span class="nx">interfaces</span><span class="p">.</span><span class="nx">backup</span>
+<span class="nx">vi</span> <span class="nx">interfaces</span>
+<span class="c1">//The file opens up. Now, we must edit it.</span>
+<span class="c1">//Add the following lines in it.NOTE, add values according to your ethernet/router settings. These are the ones appropriate for me.</span>
+<span class="nx">iface</span> <span class="nx">eth0</span> <span class="nx">inet</span> <span class="kr">static</span>
+       <span class="nx">address</span> <span class="mf">10.173</span><span class="p">.</span><span class="mf">24.69</span>
+       <span class="nx">netmask</span> <span class="mf">255.255</span><span class="p">.</span><span class="mf">255.0</span>
+       <span class="nx">gateway</span> <span class="mf">10.173</span><span class="p">.</span><span class="mf">24.250</span>
+       <span class="nx">dns</span><span class="o">-</span><span class="nx">nameservers</span> <span class="mf">10.200</span><span class="p">.</span><span class="mf">1.11</span>
+       <span class="nx">dns</span><span class="o">-</span><span class="nx">nameservers</span> <span class="mf">10.200</span><span class="p">.</span><span class="mf">11.1</span>
+
+</code></pre>
+</div>
+
+<ul>
+  <li>
+    <p>Here, we declared the <code class="highlighter-rouge">static</code> IP for the Ethernet port <code class="highlighter-rouge">eth0</code>. According to your Service Provider, you may replace <code class="highlighter-rouge">static</code> with <code class="highlighter-rouge">dhcp</code>. Thus, the definition of the port is set.</p>
+  </li>
+  <li>
+    <p>To check whether you have established connection, run <code class="highlighter-rouge">ping 10.173.24.69</code>(IP address) or <code class="highlighter-rouge">ping 10.200.1.11</code>(DNS Server).</p>
+  </li>
+  <li>
+    <p>Now, leave the BBB with an independent power source, connected to Ethernet. With a system connected to the same network, you can now access the BBB. Say, you have a laptop connected to the router or LAN network. Fire the Terminal/PuTTY and type :</p>
+  </li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">sudo</span> <span class="nx">ssh</span> <span class="nx">root</span><span class="err">@</span><span class="mf">10.173</span><span class="p">.</span><span class="mf">24.69</span>
+<span class="c1">//basic syntax is 'sudo ssh user@yourIP'</span>
+</code></pre>
+</div>
+<p>This would take a while, but is sure to get you into the BBB considering that your Bone and laptop are both connected and active. You can control and run the BBB remotely, and also share/install packages over the network.</p>
+
+<p>Now that you have connected to the Bone directly and remotely, you can do almost anything with the Processor. Tried and tested ideas include using the remote computer to run as a portable unit running heavy Mathematica/MATLAB scripts, or Python codes, or even a host/router. And with 66 GPIO pins, Electronics Projects would surely be cooler, and cleaner! :)</p>
+
+<h2 id="merits--demerits">Merits &amp; Demerits</h2>
+<ul>
+  <li>The BeagleBone is a favorable choice for beginners because it is a direct plug-and-play unit (R-Pi needs you to install Raspbian OS before use). Also, the higher no. of GPIO pins ensure that you’re never short of pins for your sensors! Also, for the geeks and performance freaks, it packs the best processor and graphics accelerator in the range. The on-board Flash is also very fast.</li>
+  <li>That said, the main issue you’d face would be lack of online support (one of the reasons I wanted to make a beginner tutorial!) for your minor bugs and queries. Also, the basic use over the web may require some use of JavaScript and hence, some background. Also, in general, using any such development board requires immense amount of patience. You don’t really get ready-made solutions online. More so with the BBB, than the R-Pi. but it’s certainly better than starting off with the Intel Galleo.</li>
+</ul>
+
+<p>Hope you have a good time tinkering around with the BeagleBone Black.</p>
+
+<p>Cheers.</p>
+
+
+                <hr>
+
+                <div id="disqus_thread"></div>
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/blog/2016/03/meanshift-algorithm-for-image-processing/" data-toggle="tooltip" data-placement="top" title="Meanshift Algorithm for Image Processing">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/blog/2016/05/working-of-a-dlp-projector/" data-toggle="tooltip" data-placement="top" title="Working of a Digital Light Processing Projector">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<hr>
+
+    </div>
+
+    
+<script>
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'eciitb';
+	var disqus_identifier = '/blog/2016/04/getting-started-with-beaglebone-black';
+	var disqus_url = 'https://elec-club-iitb.github.io/blog/2016/04/getting-started-with-beaglebone-black/';
+	var disqus_developer = 1; /* developer mode is on */
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var add = function(disqus_script) {
+			var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			dsq.src = 'https://' + disqus_shortname + '.disqus.com/' + disqus_script;
+			(document.getElementsByTagName('head')[0] || document.getElementsByID('disqus')[0]).appendChild(dsq);
+		}
+		add('embed.js');
+		add('count.js');
+	})();
+</script>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!--<li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    -->
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/elec-club-iitb">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; Electronics Club, IIT Bombay 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<script src="/slick/slick.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js"></script>
+
+    <a href="#" class="go-top" style="
+	position: fixed;
+	bottom: 4em;
+	right: 4em;
+	text-decoration: none;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.3);
+	font-size: 12px;
+	padding: 1em;
+	display: none;
+
+	.go-top:hover {
+	background-color: rgba(0, 0, 0, 0.6);"}>
+	Go Top
+	</a>
+<script type="text/javascript">$(document).ready(function() {
+			// Show or hide the sticky footer button
+			$(window).scroll(function() {
+				if ($(this).scrollTop() > 200) {
+					$('.go-top').fadeIn(200);
+				} else {
+					$('.go-top').fadeOut(200);
+				}
+			});
+			
+			// Animate the scroll to top
+			$('.go-top').click(function(event) {
+				event.preventDefault();
+				
+				$('html, body').animate({scrollTop: 0}, 1000);
+			})
+		});
+</script>
+<!--Smooth scroll -->
+<script type="text/javascript">
+	$(function() {
+  $('a[href*="#"]:not([href="#"])').click(function() {
+    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+      var target = $(this.hash);
+      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+      if (target.length) {
+        $('html, body').animate({
+          scrollTop: target.offset().top
+        }, 1000);
+        return false;
+      }
+    }
+  });
+});
+</script>
+
+<!--Smooth transition-->
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('body').css('display', 'none');
+		$('body').fadeIn(1500);
+		$('.link').click(function(event) {
+		event.preventDefault();
+		newLocation = this.href;
+		$('body').fadeOut(1000, newpage);
+	});
+	function newpage() {
+		window.location = newLocation;
+	}
+	});
+</script>
+</body>
+
+</html>
